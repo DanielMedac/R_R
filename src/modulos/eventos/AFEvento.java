@@ -17,11 +17,6 @@ public class AFEvento {
 	private ArrayList<Evento> eventos = new ArrayList<Evento>();
 
 	/*
-<<<<<<< HEAD
-	 * Probando
-=======
-	 * ejemplo javi
->>>>>>> eb47fa1945dafa4f4a7a2e01fa2b30b1ac42200d
 	 * Constructor clase evento, cuando se crea un objeto lee el fichero eventos y
 	 * por cada linea crea un objeto evento pasando la cadena de texto. Por cada
 	 * objeto que creamos lo vamos añadiendo al arraylist, de esta manera tenemos
