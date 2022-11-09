@@ -17,7 +17,7 @@ public class AFEvento {
 	private ArrayList<Evento> eventos = new ArrayList<Evento>();
 
 	/*
-	 * agrego comentario
+	 * 
 	 * Constructor clase evento, cuando se crea un objeto lee el fichero eventos y
 	 * por cada linea crea un objeto evento pasando la cadena de texto. Por cada
 	 * objeto que creamos lo vamos añadiendo al arraylist, de esta manera tenemos
