@@ -234,7 +234,7 @@ public class UIEventos extends JFrame {
 	public UIEventos() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 616, 428);
+		setBounds(200, 200, 824, 540);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -242,7 +242,7 @@ public class UIEventos extends JFrame {
 		contentPane.setLayout(null);
 		this.setIconImage(img.getImage());
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(23, 180, 553, 169);
+		scrollPane.setBounds(23, 180, 679, 221);
 		contentPane.add(scrollPane);
 		contentPane.setBackground(Color.decode("#EFD0F5"));
 		scrollPane.setBackground(Color.decode("#EFD0F5"));
@@ -264,7 +264,7 @@ public class UIEventos extends JFrame {
 		scrollPane.setViewportView(table);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(23, 21, 553, 160);
+		panel.setBounds(23, 21, 679, 160);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		panel.setBackground(Color.decode("#EFD0F5"));
@@ -399,7 +399,7 @@ public class UIEventos extends JFrame {
 					return;
 				}
 			});
-		btnInformes.setBounds(445, 359, 119, 21);
+		btnInformes.setBounds(583, 425, 119, 21);
 		contentPane.add(btnInformes);
 
 		JButton btnRetroceso = new JButton("");
@@ -420,7 +420,7 @@ public class UIEventos extends JFrame {
 				dispose();
 			}
 		});
-		btnRetroceso.setBounds(23, 349, 103, 42);
+		btnRetroceso.setBounds(0, 347, 103, 42);
 		btnRetroceso.setIcon(img3);
 		btnRetroceso.setBackground(Color.decode("#EFD0F5"));
 		contentPane.add(btnRetroceso);

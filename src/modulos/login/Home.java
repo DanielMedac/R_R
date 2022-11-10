@@ -100,7 +100,7 @@ public class Home extends JFrame {
 		btnPrimerAcceso.setBounds(316, 319, 174, 27);
 		btnPrimerAcceso.setForeground(Color.WHITE);
 		contentPane.add(btnPrimerAcceso);
-
+		
 		UiHelper.AplicarMouseListenerButtons(contentPane);
 	}
 

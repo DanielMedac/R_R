@@ -20,12 +20,13 @@ import modulos.usuarios.UI.UsuarioLoggeado;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 
 public class AdminHome extends JFrame {
 
 	JButton btnUsuarios, btnEventos, btnCerrarSesion;
 	ImageIcon imgInicio = new ImageIcon("./src/ficheros/ciclista_morao.png");
-	ImageIcon imgU = new ImageIcon("./src/ficheros/personas.png");
+	ImageIcon imgU = new ImageIcon("./src/ficheros/personas_2-1.png");
 	ImageIcon imgU2 = new ImageIcon("./src/ficheros/bicis2.png");
 	ImageIcon imgU3 = new ImageIcon("./src/ficheros/loguot2.png");
 	private JPanel contentPane;
@@ -74,10 +75,6 @@ public class AdminHome extends JFrame {
 
 	private void inicioBotones() {
 		btnUsuarios = new JButton("");
-		btnUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		
 		btnUsuarios.addMouseListener(new MouseAdapter() {
 			@Override
@@ -98,7 +95,7 @@ public class AdminHome extends JFrame {
 			}
 		});
 
-		btnUsuarios.setBounds(144, 132, 220, 155);
+		btnUsuarios.setBounds(242, 148, 124, 128);
 		btnUsuarios.setIcon(imgU);
 		btnUsuarios.setBackground(Color.decode("#EFD0F5"));
 		btnUsuarios.setBorderPainted(false);
@@ -124,7 +121,7 @@ public class AdminHome extends JFrame {
 		btnEventos.setIcon(imgU2);
 		btnEventos.setBorderPainted(false);
 		btnEventos.setBackground(new Color(239, 208, 245));
-		btnEventos.setBounds(454, 132, 220, 155);
+		btnEventos.setBounds(478, 148, 162, 128);
 		
 		contentPane.add(btnEventos);
 		
@@ -156,6 +153,16 @@ public class AdminHome extends JFrame {
 		btnCerrarSesion.setBackground(Color.decode("#EFD0F5"));
 		contentPane.add(btnCerrarSesion);
 		UiHelper.AplicarMouseListenerButtons(contentPane);
+		
+		JLabel lblUsuarios = new JLabel("Usuarios");
+		lblUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblUsuarios.setBounds(266, 281, 100, 14);
+		contentPane.add(lblUsuarios);
+		
+		JLabel lblEventos = new JLabel("Eventos");
+		lblEventos.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblEventos.setBounds(524, 281, 100, 14);
+		contentPane.add(lblEventos);
 	}
 
 	private void inicioAccionesBotones() {

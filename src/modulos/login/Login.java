@@ -48,7 +48,6 @@ public class Login extends JFrame {
 					Login frame = new Login();
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -93,6 +92,7 @@ public class Login extends JFrame {
 		txtUsuarioInput.setBackground(Color.decode("#BD88C8"));
 		contentPane.add(txtUsuarioInput);
 		txtUsuarioInput.setColumns(10);
+		
 	}
 
 	private void iniciarChkbox() {
@@ -102,12 +102,21 @@ public class Login extends JFrame {
 		chkboxRevelarContra.setBackground(Color.decode("#EFD0F5"));
 		chkboxRevelarContra.setForeground(Color.decode("#BD88C8"));
 		contentPane.add(chkboxRevelarContra);
+		txtUsuarioInput.setFocusable(true);
 
 	}
 
 	private void iniciarPasswordField() {
 
 		pfContraInput = new JPasswordField();
+		pfContraInput.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+			accesoLogin();
+			txtUsuarioInput.setFocusable(false);
+			
+			}
+		});
 
 		pfContraInput.setBounds(308, 248, 171, 23);
 		pfContraInput.setBackground(Color.decode("#BD88C8"));
@@ -141,12 +150,8 @@ public class Login extends JFrame {
 		contentPane.add(btnRetroceso);
 
 		btnIngresar = new JButton("Ingresar");
-		btnIngresar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		
-		
+	
 		btnIngresar.setFont(new Font("Dialog", Font.PLAIN, 16));
 		btnIngresar.setBackground(new Color(153, 51, 153));
 
@@ -156,11 +161,6 @@ public class Login extends JFrame {
 		contentPane.add(btnIngresar);
 
 		btnAccesoPerfil = new JButton("");
-		btnAccesoPerfil.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
 		
 		btnAccesoPerfil.setBounds(341, 78, 109, 64);
 		btnAccesoPerfil.setIcon(img2);
@@ -197,6 +197,7 @@ public class Login extends JFrame {
 	}
 
 	private void iniciarAccionesBotones() {
+		
 		btnAccesoPerfil.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -224,6 +225,19 @@ public class Login extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				accesoLogin();
 			}
+		});
+		
+			btnIngresar.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+				
+					 if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				    	 accesoLogin();
+				 }
+			}
+			
+			});
+	}
 
 			private void accesoLogin() {
 				String usuariox = txtUsuarioInput.getText();
@@ -274,7 +288,7 @@ public class Login extends JFrame {
 
 			}
 
-		});
+		
 
 	}
-}
+
