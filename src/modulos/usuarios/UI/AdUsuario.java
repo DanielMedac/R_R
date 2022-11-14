@@ -1,8 +1,8 @@
 package modulos.usuarios.UI;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.StringTokenizer;
+
 import Utils.Helper;
 import java.util.*;
 
@@ -52,7 +52,6 @@ public class AdUsuario {
 		this.apellido = token.nextToken();
 		this.dni = token.nextToken();
 		this.contrasena = token.nextToken();
-		
 
 	}
 
@@ -77,10 +76,10 @@ public class AdUsuario {
 		return this.contrasena;
 	}
 
-//Este toString sobreescribe el fichero con el separador
+	//Este toString sobreescribe el fichero con el separador
 	@Override
 	public String toString() {
-		return this.id + Helper.tokenColumna + this.nombre + Helper.tokenColumna + this.apellido
-				+ Helper.tokenColumna + this.dni + Helper.tokenColumna + this.contrasena;
+		return this.id + Helper.tokenColumna + this.nombre + Helper.tokenColumna + this.apellido + Helper.tokenColumna
+				+ this.dni + Helper.tokenColumna + this.contrasena;
 	}
 }
