@@ -1,14 +1,17 @@
 package modulos.usuarios.UI;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import modulos.login.AdminHome;
@@ -61,6 +64,13 @@ public class UsuarioEdicion extends JFrame {
 			txt_Nombre.requestFocus();
 			return false;
 		}
+		if (txt_Nombre.getText().length() > 20) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'nombre' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Nombre.requestFocus();
+			return false;
+		}
 		if (txt_Apellido.getText().isEmpty()) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
 			JOptionPane.showMessageDialog(rootPane, "Campo 'apellido' sin rellenar", "Error",
@@ -68,13 +78,15 @@ public class UsuarioEdicion extends JFrame {
 			txt_Apellido.requestFocus();
 			return false;
 		}
-		if (txt_Dni.getText().isEmpty()) {
+		if (txt_Apellido.getText().length() > 40) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' sin rellenar", "Error", JOptionPane.ERROR_MESSAGE);
-			txt_Dni.requestFocus();
+			JOptionPane.showMessageDialog(rootPane, "Campo 'apellido' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Apellido.requestFocus();
 			return false;
 		}
-		if(validarNif(txt_Dni.getText())) {
+		if (txt_Dni.getText().isEmpty() || validarNif(txt_Dni.getText())) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
 			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
 			txt_Dni.requestFocus();
 			return false;
@@ -147,42 +159,29 @@ public class UsuarioEdicion extends JFrame {
 		this.rwUsuario.modificar(usuario);
 		limpiarCampos();
 	}
-	
+
 	// funcion para comprobar dni
-		private boolean validarNif(String nif) {
-			// patrón: verifica que tenga 8 numeros y una letra
-			Pattern pattern = Pattern.compile("(\\d{1,8})([A-z])");
-			Matcher matcher = pattern.matcher(nif.toUpperCase());
-			if (matcher.matches()) {
-				String letra = matcher.group(2);// saca la letra
-				String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
-				//saca el numero
-				int index = Integer.parseInt(matcher.group(1));
-				// calcula el módulo de 23 para sacar la letra del la variable letras
-				index = index % 23;
-				String reference = letras.substring(index, index + 1);
-				if (reference.equalsIgnoreCase(letra)) {
-					return true;
-				} else {
-					return false;
-				}
+	private boolean validarNif(String nif) {
+		// patrón: verifica que tenga 8 numeros y una letra
+		Pattern pattern = Pattern.compile("(\\d{1,8})([A-z])");
+		Matcher matcher = pattern.matcher(nif.toUpperCase());
+		if (matcher.matches()) {
+			String letra = matcher.group(2);// saca la letra
+			String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+			// saca el numero
+			int index = Integer.parseInt(matcher.group(1));
+			// calcula el módulo de 23 para sacar la letra del la variable letras
+			index = index % 23;
+			String reference = letras.substring(index, index + 1);
+			if (reference.equalsIgnoreCase(letra)) {
+				return true;
 			} else {
 				return false;
 			}
+		} else {
+			return false;
 		}
-
-	/*
-	 * public void EscogeUsuario() { // id (usuario) seleccionado de la tabla String
-	 * idSeleccionado = (String) this.table.getValueAt(table.getSelectedRow(), 0);
-	 * // Buscar en la lista por el id. AdUsuario usuarioSeleccionado =
-	 * this.rwUsuario.buscarUsuarioPorId(idSeleccionado); // rellena la informacion
-	 * en lo txtlabel del usuario seleccionado
-	 * this.txt_Id.setText(usuarioSeleccionado.getId());
-	 * this.txt_Nombre.setText(usuarioSeleccionado.getNombre());
-	 * this.txt_Apellido.setText(usuarioSeleccionado.getApellido());
-	 * this.txt_Dni.setText(usuarioSeleccionado.getDni());
-	 * this.txt_Contrasena.setText(usuarioSeleccionado.getContrasena()); }
-	 */
+	}
 
 	/**
 	 * Create the frame.
@@ -267,7 +266,6 @@ public class UsuarioEdicion extends JFrame {
 		});
 		btnCancelar.setBounds(471, 391, 112, 18);
 		panel.add(btnCancelar);
-		
 
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

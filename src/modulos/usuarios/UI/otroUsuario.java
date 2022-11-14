@@ -10,10 +10,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class otroUsuario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private JTextField txtdeseaAadirOtro;
 
 	/**
 	 * Launch the application.
@@ -38,10 +40,12 @@ public class otroUsuario extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JTextArea txtrdeseaAadirOtro = new JTextArea();
-		txtrdeseaAadirOtro.setText("\u00BFDesea a\u00F1adir otro usuario?");
-		txtrdeseaAadirOtro.setBounds(105, 98, 221, 22);
-		contentPanel.add(txtrdeseaAadirOtro);
+		txtdeseaAadirOtro = new JTextField();
+		txtdeseaAadirOtro.setText("\u00BFDesea a\u00F1adir otro usuario?");
+		txtdeseaAadirOtro.setEditable(false);
+		txtdeseaAadirOtro.setBounds(141, 95, 165, 20);
+		contentPanel.add(txtdeseaAadirOtro);
+		txtdeseaAadirOtro.setColumns(10);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

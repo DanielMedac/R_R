@@ -9,21 +9,24 @@ import java.util.*;
 public class AdUsuario {
 	private String id;
 	private String nombre, apellido, dni, contrasena;
+	private String tlf;
 
-	public AdUsuario(String nombre, String apellido, String dni, String contrasena) {
+	public AdUsuario(String nombre, String apellido, String dni, String contrasena, int tlf) {
 		this.id = UUID.randomUUID().toString();
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.contrasena = contrasena;
+		this.tlf = String.valueOf(tlf);
 
 	}
 
-	public void Actualizar(String nombre, String apellido, String dni, String contrasena) {
+	public void Actualizar(String nombre, String apellido, String dni, String contrasena, int tlf) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.contrasena = contrasena;
+		this.tlf = String.valueOf(tlf);
 
 	}
 
@@ -36,6 +39,7 @@ public class AdUsuario {
 		this.apellido = token.nextToken();
 		this.dni = token.nextToken();
 		this.contrasena = token.nextToken();
+		this.tlf = token.nextToken();
 
 	}
 
@@ -59,11 +63,15 @@ public class AdUsuario {
 	public String getContrasena() {
 		return this.contrasena;
 	}
+	
+	public String getTlf() {
+		return this.tlf;
+	}
 
 	//Este toString sobreescribe el fichero con el separador
 	@Override
 	public String toString() {
 		return this.id + Helper.tokenColumna + this.nombre + Helper.tokenColumna + this.apellido + Helper.tokenColumna
-				+ this.dni + Helper.tokenColumna + this.contrasena;
+				+ this.dni + Helper.tokenColumna + this.contrasena + Helper.tokenColumna + this.tlf;
 	}
 }

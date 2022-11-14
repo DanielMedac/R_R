@@ -37,11 +37,6 @@ public class UIUsuarios extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	/*private JTextField txt_Id;
-	private JTextField txt_Nombre;
-	private JTextField txt_Apellido;
-	private JTextField txt_Dni;
-	private JTextField txt_Contrasena;*/
 	private RWUsuario rwUsuario = new RWUsuario();
 
 	private JButton btnModificar = new JButton("Modificar");
@@ -68,27 +63,6 @@ public class UIUsuarios extends JFrame {
 		});
 	}
 
-	/*private void cambiarEstado(boolean estado) {
-		this.txt_Id.setEditable(estado);
-		this.txt_Nombre.setEditable(estado);
-		this.txt_Apellido.setEditable(estado);
-		this.txt_Dni.setEditable(estado);
-		this.txt_Contrasena.setEditable(estado);
-		this.btnModificar.setEnabled(!estado);
-		this.btnEliminar.setEnabled(!estado);
-		this.btnAnyadir.setEnabled(!estado);
-		this.btnGuardar.setEnabled(estado);
-	}*/
-
-	// metodo para dejar campos en blanco una vez que se pulse insertar
-	/*private void limpiarCampos() {
-		this.txt_Id.setText("");
-		this.txt_Nombre.setText("");
-		this.txt_Apellido.setText("");
-		this.txt_Dni.setText("");
-		this.txt_Contrasena.setText("");
-	}*/
-
 	public boolean SeleccionarUsuario() {
 		// validar que se selecciona un registro de la tabla
 		if (table.getSelectedRow() < 0) {
@@ -100,107 +74,9 @@ public class UIUsuarios extends JFrame {
 		String idSeleccionado = (String) this.table.getValueAt(table.getSelectedRow(), 0);
 		// Buscar en la lista por el id.
 		AdUsuario usuarioSeleccionado = this.rwUsuario.buscarUsuarioPorId(idSeleccionado);
-		// rellena la informacion en lo txtlabel del usuario seleccionado
-		/*this.txt_Id.setText(usuarioSeleccionado.getId());
-		this.txt_Nombre.setText(usuarioSeleccionado.getNombre());
-		this.txt_Apellido.setText(usuarioSeleccionado.getApellido());
-		this.txt_Dni.setText(usuarioSeleccionado.getDni());
-		this.txt_Contrasena.setText(usuarioSeleccionado.getContrasena());
-		*/
 		return true;
 	}
 
-	/*protected void guardarUsuario() {
-		if (!validarCampos()) {
-			return;
-		}
-		AdUsuario usuario = this.rwUsuario.buscarUsuarioPorId(this.txt_Id.getText());
-		if (usuario != null) {
-			guardarUsuarioModificado(usuario);
-		} else {
-			guardarUsuarioNuevo();
-		}
-		cambiarEstado(false);
-
-	}*/
-
-	/*private boolean validarCampos() {
-		if (txt_Nombre.getText().isEmpty()) {
-			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'nombre' sin rellenar", "Error", JOptionPane.ERROR_MESSAGE);
-			txt_Nombre.requestFocus();
-			return false;
-		}
-		if (txt_Apellido.getText().isEmpty()) {
-			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'apellido' sin rellenar", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			txt_Apellido.requestFocus();
-			return false;
-		}
-		if (txt_Dni.getText().isEmpty()) {
-			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' sin rellenar", "Error", JOptionPane.ERROR_MESSAGE);
-			txt_Dni.requestFocus();
-			return false;
-		}
-		if (txt_Contrasena.getText().isEmpty()) {
-			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'contraseña' sin rellenar", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			txt_Contrasena.requestFocus();
-			return false;
-		}
-		if (txt_Contrasena.getText().length() < 8) {
-			JOptionPane.showMessageDialog(rootPane, "La contraseña debe tener al menos 8 caracteres.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			txt_Contrasena.requestFocus();
-			return false;
-		}
-		return true;
-	}*/
-
-	/*private void guardarUsuarioNuevo() {
-		if (txt_Contrasena.getText().length() < 8) {
-			JOptionPane.showMessageDialog(rootPane, "La contraseña debe tener al menos 8 caracteres", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			txt_Contrasena.requestFocus();
-			return;
-		}
-		// Con todos los campos rellenos, se pasa a crear el nuevo objeto AdUsuario
-		AdUsuario nuevoUsuario = null;
-
-		try {
-			nuevoUsuario = new AdUsuario(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
-					txt_Contrasena.getText());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		rwUsuario.anyadir(nuevoUsuario);
-		cargarTabla();
-		limpiarCampos();
-	}*/
-
-	/*private void guardarUsuarioModificado(AdUsuario usuario) {
-		if (txt_Contrasena.getText().length() < 8) {
-			JOptionPane.showMessageDialog(rootPane, "La contraseña debe tener al menos 8 caracteres", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			txt_Contrasena.requestFocus();
-			return;
-		}
-		try {
-			usuario.Actualizar(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
-					txt_Contrasena.getText());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		this.rwUsuario.modificar(usuario);
-		cargarTabla();
-		limpiarCampos();
-	}*/
 	/*
 	 * Metodo cargar, este metodo rellena la tabla. Se instancia un objeto de la
 	 * clase RWUsuario y un objeto de la clase DefaultTableModel que es la clase que
