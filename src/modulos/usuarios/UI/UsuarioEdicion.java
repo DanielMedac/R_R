@@ -3,11 +3,16 @@ package modulos.usuarios.UI;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modulos.login.AdminHome;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -69,6 +74,11 @@ public class UsuarioEdicion extends JFrame {
 			txt_Dni.requestFocus();
 			return false;
 		}
+		if(validarNif(txt_Dni.getText())) {
+			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+			txt_Dni.requestFocus();
+			return false;
+		}
 		if (txt_Contrasena.getText().isEmpty()) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
 			JOptionPane.showMessageDialog(rootPane, "Campo 'contraseña' sin rellenar", "Error",
@@ -84,7 +94,7 @@ public class UsuarioEdicion extends JFrame {
 		}
 		return true;
 	}
-	
+
 	private void guardarUsuarioNuevo() {
 		if (txt_Contrasena.getText().length() < 8) {
 			JOptionPane.showMessageDialog(rootPane, "La contraseña debe tener al menos 8 caracteres", "Error",
@@ -105,7 +115,7 @@ public class UsuarioEdicion extends JFrame {
 		rwUsuario.anyadir(nuevoUsuario);
 		limpiarCampos();
 	}
-	
+
 	protected void guardarUsuario() {
 		if (!validarCampos()) {
 			return;
@@ -118,7 +128,7 @@ public class UsuarioEdicion extends JFrame {
 		}
 
 	}
-	
+
 	private void guardarUsuarioModificado(AdUsuario usuario) {
 		if (txt_Contrasena.getText().length() < 8) {
 			JOptionPane.showMessageDialog(rootPane, "La contraseña debe tener al menos 8 caracteres", "Error",
@@ -138,18 +148,41 @@ public class UsuarioEdicion extends JFrame {
 		limpiarCampos();
 	}
 	
-	/*public void EscogeUsuario() {
-		// id (usuario) seleccionado de la tabla
-		String idSeleccionado = (String) this.table.getValueAt(table.getSelectedRow(), 0);
-		// Buscar en la lista por el id.
-		AdUsuario usuarioSeleccionado = this.rwUsuario.buscarUsuarioPorId(idSeleccionado);
-		// rellena la informacion en lo txtlabel del usuario seleccionado
-		this.txt_Id.setText(usuarioSeleccionado.getId());
-		this.txt_Nombre.setText(usuarioSeleccionado.getNombre());
-		this.txt_Apellido.setText(usuarioSeleccionado.getApellido());
-		this.txt_Dni.setText(usuarioSeleccionado.getDni());
-		this.txt_Contrasena.setText(usuarioSeleccionado.getContrasena());
-	}*/
+	// funcion para comprobar dni
+		private boolean validarNif(String nif) {
+			// patrón: verifica que tenga 8 numeros y una letra
+			Pattern pattern = Pattern.compile("(\\d{1,8})([A-z])");
+			Matcher matcher = pattern.matcher(nif.toUpperCase());
+			if (matcher.matches()) {
+				String letra = matcher.group(2);// saca la letra
+				String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+				//saca el numero
+				int index = Integer.parseInt(matcher.group(1));
+				// calcula el módulo de 23 para sacar la letra del la variable letras
+				index = index % 23;
+				String reference = letras.substring(index, index + 1);
+				if (reference.equalsIgnoreCase(letra)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+
+	/*
+	 * public void EscogeUsuario() { // id (usuario) seleccionado de la tabla String
+	 * idSeleccionado = (String) this.table.getValueAt(table.getSelectedRow(), 0);
+	 * // Buscar en la lista por el id. AdUsuario usuarioSeleccionado =
+	 * this.rwUsuario.buscarUsuarioPorId(idSeleccionado); // rellena la informacion
+	 * en lo txtlabel del usuario seleccionado
+	 * this.txt_Id.setText(usuarioSeleccionado.getId());
+	 * this.txt_Nombre.setText(usuarioSeleccionado.getNombre());
+	 * this.txt_Apellido.setText(usuarioSeleccionado.getApellido());
+	 * this.txt_Dni.setText(usuarioSeleccionado.getDni());
+	 * this.txt_Contrasena.setText(usuarioSeleccionado.getContrasena()); }
+	 */
 
 	/**
 	 * Create the frame.
@@ -219,17 +252,32 @@ public class UsuarioEdicion extends JFrame {
 		txt_Contrasena.setColumns(10);
 		txt_Contrasena.setBounds(259, 303, 345, 19);
 		panel.add(txt_Contrasena);
-		
+
 		btnGuardar.setBounds(305, 391, 112, 18);
 		panel.add(btnGuardar);
-		
+
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UIUsuarios atras = new UIUsuarios();
+				atras.setLocationRelativeTo(null);
+				atras.setVisible(true);
+				dispose();
+			}
+		});
 		btnCancelar.setBounds(471, 391, 112, 18);
 		panel.add(btnCancelar);
 		
+
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				guardarUsuario();
+				if (validarCampos()) {
+					otroUsuario nuevo = new otroUsuario();
+					nuevo.setLocationRelativeTo(null);
+					nuevo.setVisible(true);
+					dispose();
+					guardarUsuario();
+				}
 			}
 		});
 	}

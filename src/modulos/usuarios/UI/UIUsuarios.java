@@ -15,6 +15,7 @@ import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,6 +37,11 @@ public class UIUsuarios extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	/*private JTextField txt_Id;
+	private JTextField txt_Nombre;
+	private JTextField txt_Apellido;
+	private JTextField txt_Dni;
+	private JTextField txt_Contrasena;*/
 	private RWUsuario rwUsuario = new RWUsuario();
 
 	private JButton btnModificar = new JButton("Modificar");
@@ -228,6 +234,7 @@ public class UIUsuarios extends JFrame {
 		this.rwUsuario.borrar(idSeleccionado);
 		cargarTabla();
 	}
+	
 
 	/**
 	 * Create the frame.
@@ -331,17 +338,12 @@ public class UIUsuarios extends JFrame {
 
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UsuarioEdicion edit = new UsuarioEdicion();
-				edit.setLocationRelativeTo(null);
-				edit.setVisible(true);
-				dispose();
-				/*if (!SeleccionarUsuario()) {
-					txt_Contrasena.setEditable(false);
-					cambiarEstado(false);
-				} else {
-					txt_Contrasena.setEditable(true);
-					cambiarEstado(true);
-				}*/
+				if (SeleccionarUsuario()) {
+					UsuarioEdicion edit = new UsuarioEdicion();
+					edit.setLocationRelativeTo(null);
+					edit.setVisible(true);
+					dispose();
+				}
 			}
 		});
 
