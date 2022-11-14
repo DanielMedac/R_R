@@ -9,14 +9,30 @@ import java.util.*;
 public class AdUsuario {
 	private String id;
 	private String nombre, apellido, dni, contrasena;
-
-	public AdUsuario(String nombre, String apellido, String dni, String contrasena) {
+/**
+ * 
+ * @param contrasenya. Cuando se anyade un usuario, por defecto su contrasenya
+ * será igual que su dni.
+ */
+	public AdUsuario(String nombre, String apellido, String dni) {
 		this.id = UUID.randomUUID().toString();
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
-		this.contrasena = contrasena;
+		this.contrasena = dni;
 
+	}
+	/**
+	 * Cliente debe cambiar cuando accede por primera vez su contrasenya, no 
+	 * puede ser igual a su dni.
+	 * metodo verificarCambioContrasenya() 
+	 * @return true si campo contrasenya es diferente a dni
+	 */ 
+	public boolean verificarCambioContrasenya() {
+		if (this.dni != this.contrasena) {
+			return true;
+		}
+		return false;
 	}
 
 	public void Actualizar(String nombre, String apellido, String dni, String contrasena) {

@@ -69,11 +69,12 @@ public class UIUsuarios extends JFrame {
 	}
 
 	private void cambiarEstado(boolean estado) {
-		this.txt_Id.setEditable(estado);
+		//this.txt_Id.setEditable(estado);
+		this.txt_Id.setVisible(!estado);
 		this.txt_Nombre.setEditable(estado);
 		this.txt_Apellido.setEditable(estado);
 		this.txt_Dni.setEditable(estado);
-		this.txt_Contrasena.setEditable(estado);
+		this.txt_Contrasena.setEditable(!estado);
 		this.btnModificar.setEnabled(!estado);
 		this.btnEliminar.setEnabled(!estado);
 		this.btnAnyadir.setEnabled(!estado);
@@ -143,37 +144,37 @@ public class UIUsuarios extends JFrame {
 			txt_Dni.requestFocus();
 			return false;
 		}
-		if (txt_Contrasena.getText().isEmpty()) {
+		/*if (txt_Contrasena.getText().isEmpty()) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
 			JOptionPane.showMessageDialog(rootPane, "Campo 'contraseña' sin rellenar", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return false;
-		}
-		if (txt_Contrasena.getText().length() < 8) {
+		}*/
+		/*if (txt_Contrasena.getText().length() < 8) {
 			JOptionPane.showMessageDialog(rootPane,
 					"La contraseña debe tener al menos 8 caracteres.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return false;
-		}
+		}*/
 		return true;
 	}
 
 	private void guardarUsuarioNuevo() {
-		if (txt_Contrasena.getText().length() < 8) {
+		/*if (txt_Contrasena.getText().length() < 8) {
 			JOptionPane.showMessageDialog(rootPane,
 					"La contraseña debe tener al menos 8 caracteres", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return;
-		}
+		}*/
 		// Con todos los campos rellenos, se pasa a crear el nuevo objeto AdUsuario
 		AdUsuario nuevoUsuario = null;
 
 		try {
-			nuevoUsuario = new AdUsuario(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
-					txt_Contrasena.getText());
+			nuevoUsuario = new AdUsuario(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText()
+					);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -184,13 +185,13 @@ public class UIUsuarios extends JFrame {
 	}
 
 	private void guardarUsuarioModificado(AdUsuario usuario) {
-		if (txt_Contrasena.getText().length() < 8) {
+		/*if (txt_Contrasena.getText().length() < 8) {
 			JOptionPane.showMessageDialog(rootPane,
 					"La contraseña debe tener al menos 8 caracteres", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return;
-		}
+		}*/
 		try {
 			usuario.Actualizar(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
 					txt_Contrasena.getText());
@@ -371,6 +372,10 @@ public class UIUsuarios extends JFrame {
 										contentPane.add(btnEliminar);
 										
 												JButton btnInformes = new JButton("Informes");
+												btnInformes.addActionListener(new ActionListener() {
+													public void actionPerformed(ActionEvent e) {
+													}
+												});
 												btnInformes.setBounds(273, 448, 273, 21);
 												contentPane.add(btnInformes);
 												btnInformes.addMouseListener(new MouseAdapter() {
