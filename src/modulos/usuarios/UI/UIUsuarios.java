@@ -50,7 +50,7 @@ public class UIUsuarios extends JFrame {
 	ImageIcon img = new ImageIcon("./src/ficheros/ciclista_morao.png");
 	ImageIcon img2 = new ImageIcon("./src/ficheros/perfil.png");
 	ImageIcon img3 = new ImageIcon("./src/ficheros/flecha.png");
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -123,10 +123,18 @@ public class UIUsuarios extends JFrame {
 		cambiarEstado(false);
 
 	}
+
 	private boolean validarCampos() {
 		if (txt_Nombre.getText().isEmpty()) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
 			JOptionPane.showMessageDialog(rootPane, "Campo 'nombre' sin rellenar", "Error", JOptionPane.ERROR_MESSAGE);
+			txt_Nombre.requestFocus();
+			return false;
+		}
+		if (txt_Nombre.getText().length() > 20) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'nombre' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
 			txt_Nombre.requestFocus();
 			return false;
 		}
@@ -137,22 +145,28 @@ public class UIUsuarios extends JFrame {
 			txt_Apellido.requestFocus();
 			return false;
 		}
-		if (txt_Dni.getText().isEmpty()) {
+		if (txt_Apellido.getText().length() > 40) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' sin rellenar", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(rootPane, "Campo 'apellido' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Apellido.requestFocus();
+			return false;
+		}
+		if (txt_Dni.getText().isEmpty() || validarNif(txt_Dni.getText())) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
 			txt_Dni.requestFocus();
 			return false;
 		}
 		if (txt_Contrasena.getText().isEmpty()) {
 			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
-			JOptionPane.showMessageDialog(rootPane, "Campo 'contraseña' sin rellenar", "Error",
+			JOptionPane.showMessageDialog(rootPane, "Campo 'contrase\u00F1a' sin rellenar", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return false;
 		}
 		if (txt_Contrasena.getText().length() < 8) {
-			JOptionPane.showMessageDialog(rootPane,
-					"La contraseña debe tener al menos 8 caracteres.", "Error",
+			JOptionPane.showMessageDialog(rootPane, "La contrase\u00F1a debe tener al menos 8 caracteres.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return false;
@@ -162,8 +176,7 @@ public class UIUsuarios extends JFrame {
 
 	private void guardarUsuarioNuevo() {
 		if (txt_Contrasena.getText().length() < 8) {
-			JOptionPane.showMessageDialog(rootPane,
-					"La contraseña debe tener al menos 8 caracteres", "Error",
+			JOptionPane.showMessageDialog(rootPane, "La contrase\u00F1a debe tener al menos 8 caracteres", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return;
@@ -185,8 +198,7 @@ public class UIUsuarios extends JFrame {
 
 	private void guardarUsuarioModificado(AdUsuario usuario) {
 		if (txt_Contrasena.getText().length() < 8) {
-			JOptionPane.showMessageDialog(rootPane,
-					"La contraseña debe tener al menos 8 caracteres", "Error",
+			JOptionPane.showMessageDialog(rootPane, "La contrase\u00F1a debe tener al menos 8 caracteres", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			txt_Contrasena.requestFocus();
 			return;
@@ -203,6 +215,29 @@ public class UIUsuarios extends JFrame {
 		cargarTabla();
 		limpiarCampos();
 	}
+
+	private boolean validarNif(String nif) {
+		// patrÃ³n: verifica que tenga 8 numeros y una letra
+		Pattern pattern = Pattern.compile("(\\d{1,8})([A-z])");
+		Matcher matcher = pattern.matcher(nif.toUpperCase());
+		if (matcher.matches()) {
+			String letra = matcher.group(2);// saca la letra
+			String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+			// saca el numero
+			int index = Integer.parseInt(matcher.group(1));
+			// calcula el mÃ³dulo de 23 para sacar la letra del la variable letras
+			index = index % 23;
+			String reference = letras.substring(index, index + 1);
+			if (reference.equalsIgnoreCase(letra)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 	/*
 	 * Metodo cargar, este metodo rellena la tabla. Se instancia un objeto de la
 	 * clase RWUsuario y un objeto de la clase DefaultTableModel que es la clase que
@@ -258,7 +293,7 @@ public class UIUsuarios extends JFrame {
 		scrollPane.setBackground(Color.decode("#EFD0F5"));
 		table = new JTable();
 		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null }, },
-				new String[] { "Id", "Nombre", "Apellido", "Dni", "Contraseña" }) {
+				new String[] { "Id", "Nombre", "Apellido", "Dni", "Contrase\u00F1a" }) {
 			Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class };
 
 			public Class getColumnClass(int columnIndex) {
@@ -294,7 +329,7 @@ public class UIUsuarios extends JFrame {
 		lblDni.setBounds(24, 131, 45, 13);
 		panel.add(lblDni);
 
-		JLabel lblContrasena = new JLabel("Contraseña");
+		JLabel lblContrasena = new JLabel("Contrase\u00F1a");
 		lblContrasena.setBounds(24, 154, 77, 13);
 		panel.add(lblContrasena);
 
@@ -330,7 +365,7 @@ public class UIUsuarios extends JFrame {
 		txt_Contrasena.setEditable(false);
 
 		JButton btnRetroceso = new JButton("");
-		
+
 		btnRetroceso.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -361,63 +396,64 @@ public class UIUsuarios extends JFrame {
 		UiHelper.AplicarMouseListenerButtons(panel);
 
 		UiHelper.AplicarEstilos(table);
-				btnAnyadir.setBounds(88, 409, 127, 19);
-				contentPane.add(btnAnyadir);
-						btnModificar.setBounds(263, 409, 120, 18);
-						contentPane.add(btnModificar);
-								btnGuardar.setBounds(434, 409, 112, 18);
-								contentPane.add(btnGuardar);
-										btnEliminar.setBounds(596, 409, 103, 18);
-										contentPane.add(btnEliminar);
-										
-												JButton btnInformes = new JButton("Informes");
-												btnInformes.setBounds(273, 448, 273, 21);
-												contentPane.add(btnInformes);
-												btnInformes.addMouseListener(new MouseAdapter() {
-													@Override
-													public void mouseClicked(MouseEvent e) {
-														JOptionPane.showMessageDialog(rootPane, "Pagina en proceso, sentimos las molestias", "Advertencia",
-																JOptionPane.WARNING_MESSAGE);
-														return;
-													}
-													@Override
-													public void mousePressed(MouseEvent e) {
-														JOptionPane.showMessageDialog(rootPane, "Pagina en proceso, sentimos las molestias", "Advertencia",
-																JOptionPane.WARNING_MESSAGE);
-														return;
-													}
-												});
-								
-										btnEliminar.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent e) {
-												borrarUsuario();
-											}
-										});
-						
-								btnGuardar.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										guardarUsuario();
-									}
-								});
-				
-						btnModificar.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								if (!SeleccionarUsuario()) {
-									txt_Contrasena.setEditable(false);
-									cambiarEstado(false);
-								} else {
-									txt_Contrasena.setEditable(true);
-									cambiarEstado(true);
-								}
-							}
-						});
-		
-				btnAnyadir.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						cambiarEstado(true);
-					}
-				});
-		//Establecemos el nombre del usuario logeado.
+		btnAnyadir.setBounds(88, 409, 127, 19);
+		contentPane.add(btnAnyadir);
+		btnModificar.setBounds(263, 409, 120, 18);
+		contentPane.add(btnModificar);
+		btnGuardar.setBounds(434, 409, 112, 18);
+		contentPane.add(btnGuardar);
+		btnEliminar.setBounds(596, 409, 103, 18);
+		contentPane.add(btnEliminar);
+
+		JButton btnInformes = new JButton("Informes");
+		btnInformes.setBounds(273, 448, 273, 21);
+		contentPane.add(btnInformes);
+		btnInformes.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JOptionPane.showMessageDialog(rootPane, "Pagina en proceso, sentimos las molestias", "Advertencia",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JOptionPane.showMessageDialog(rootPane, "Pagina en proceso, sentimos las molestias", "Advertencia",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+		});
+
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				borrarUsuario();
+			}
+		});
+
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				guardarUsuario();
+			}
+		});
+
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!SeleccionarUsuario()) {
+					txt_Contrasena.setEditable(false);
+					cambiarEstado(false);
+				} else {
+					txt_Contrasena.setEditable(true);
+					cambiarEstado(true);
+				}
+			}
+		});
+
+		btnAnyadir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cambiarEstado(true);
+			}
+		});
+		// Establecemos el nombre del usuario logeado.
 		this.setTitle(UsuarioLoggeado.getInstance().getUsuario());
 	}
 }
