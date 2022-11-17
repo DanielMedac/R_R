@@ -15,7 +15,6 @@ import java.text.ParseException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,9 +36,15 @@ public class UIUsuarios extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	private JTextField txt_Id;
+	private JTextField txt_Nombre;
+	private JTextField txt_Apellido;
+	private JTextField txt_Dni;
+	private JTextField txt_Contrasena;
 	private RWUsuario rwUsuario = new RWUsuario();
 
 	private JButton btnModificar = new JButton("Modificar");
+	private JButton btnGuardar = new JButton("Guardar");
 	private JButton btnEliminar = new JButton("Eliminar");
 	private JButton btnAnyadir = new JButton("A\u00F1adir");
 	ImageIcon img = new ImageIcon("./src/ficheros/ciclista_morao.png");
@@ -63,6 +68,27 @@ public class UIUsuarios extends JFrame {
 		});
 	}
 
+	private void cambiarEstado(boolean estado) {
+		this.txt_Id.setEditable(estado);
+		this.txt_Nombre.setEditable(estado);
+		this.txt_Apellido.setEditable(estado);
+		this.txt_Dni.setEditable(estado);
+		this.txt_Contrasena.setEditable(estado);
+		this.btnModificar.setEnabled(!estado);
+		this.btnEliminar.setEnabled(!estado);
+		this.btnAnyadir.setEnabled(!estado);
+		this.btnGuardar.setEnabled(estado);
+	}
+
+	// metodo para dejar campos en blanco una vez que se pulse insertar
+	private void limpiarCampos() {
+		this.txt_Id.setText("");
+		this.txt_Nombre.setText("");
+		this.txt_Apellido.setText("");
+		this.txt_Dni.setText("");
+		this.txt_Contrasena.setText("");
+	}
+
 	public boolean SeleccionarUsuario() {
 		// validar que se selecciona un registro de la tabla
 		if (table.getSelectedRow() < 0) {
@@ -74,7 +100,142 @@ public class UIUsuarios extends JFrame {
 		String idSeleccionado = (String) this.table.getValueAt(table.getSelectedRow(), 0);
 		// Buscar en la lista por el id.
 		AdUsuario usuarioSeleccionado = this.rwUsuario.buscarUsuarioPorId(idSeleccionado);
+		// rellena la informacion en lo txtlabel del usuario seleccionado
+		this.txt_Id.setText(usuarioSeleccionado.getId());
+		this.txt_Nombre.setText(usuarioSeleccionado.getNombre());
+		this.txt_Apellido.setText(usuarioSeleccionado.getApellido());
+		this.txt_Dni.setText(usuarioSeleccionado.getDni());
+		this.txt_Contrasena.setText(usuarioSeleccionado.getContrasena());
+
 		return true;
+	}
+
+	protected void guardarUsuario() {
+		if (!validarCampos()) {
+			return;
+		}
+		AdUsuario usuario = this.rwUsuario.buscarUsuarioPorId(this.txt_Id.getText());
+		if (usuario != null) {
+			guardarUsuarioModificado(usuario);
+		} else {
+			guardarUsuarioNuevo();
+		}
+		cambiarEstado(false);
+
+	}
+
+	private boolean validarCampos() {
+		if (txt_Nombre.getText().isEmpty()) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'nombre' sin rellenar", "Error", JOptionPane.ERROR_MESSAGE);
+			txt_Nombre.requestFocus();
+			return false;
+		}
+		if (txt_Nombre.getText().length() > 20) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'nombre' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Nombre.requestFocus();
+			return false;
+		}
+		if (txt_Apellido.getText().isEmpty()) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'apellido' sin rellenar", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Apellido.requestFocus();
+			return false;
+		}
+		if (txt_Apellido.getText().length() > 40) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'apellido' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Apellido.requestFocus();
+			return false;
+		}
+		if (txt_Dni.getText().isEmpty() || validarNif(txt_Dni.getText())) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'DNI' incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+			txt_Dni.requestFocus();
+			return false;
+		}
+		if (txt_Contrasena.getText().isEmpty()) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'contrase\u00F1a' sin rellenar", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Contrasena.requestFocus();
+			return false;
+		}
+		if (txt_Contrasena.getText().length() < 8) {
+			JOptionPane.showMessageDialog(rootPane, "La contrase\u00F1a debe tener al menos 8 caracteres.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Contrasena.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private void guardarUsuarioNuevo() {
+		if (txt_Contrasena.getText().length() < 8) {
+			JOptionPane.showMessageDialog(rootPane, "La contrase\u00F1a debe tener al menos 8 caracteres", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Contrasena.requestFocus();
+			return;
+		}
+		// Con todos los campos rellenos, se pasa a crear el nuevo objeto AdUsuario
+		AdUsuario nuevoUsuario = null;
+
+		try {
+			nuevoUsuario = new AdUsuario(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
+					txt_Contrasena.getText());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		rwUsuario.anyadir(nuevoUsuario);
+		cargarTabla();
+		limpiarCampos();
+	}
+
+	private void guardarUsuarioModificado(AdUsuario usuario) {
+		if (txt_Contrasena.getText().length() < 8) {
+			JOptionPane.showMessageDialog(rootPane, "La contrase\u00F1a debe tener al menos 8 caracteres", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Contrasena.requestFocus();
+			return;
+		}
+		try {
+			usuario.Actualizar(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
+					txt_Contrasena.getText());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		this.rwUsuario.modificar(usuario);
+		cargarTabla();
+		limpiarCampos();
+	}
+
+	private boolean validarNif(String nif) {
+		// patrón: verifica que tenga 8 numeros y una letra
+		Pattern pattern = Pattern.compile("(\\d{1,8})([A-z])");
+		Matcher matcher = pattern.matcher(nif.toUpperCase());
+		if (matcher.matches()) {
+			String letra = matcher.group(2);// saca la letra
+			String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+			// saca el numero
+			int index = Integer.parseInt(matcher.group(1));
+			// calcula el módulo de 23 para sacar la letra del la variable letras
+			index = index % 23;
+			String reference = letras.substring(index, index + 1);
+			if (reference.equalsIgnoreCase(letra)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/*
@@ -110,7 +271,6 @@ public class UIUsuarios extends JFrame {
 		this.rwUsuario.borrar(idSeleccionado);
 		cargarTabla();
 	}
-	
 
 	/**
 	 * Create the frame.
@@ -133,7 +293,7 @@ public class UIUsuarios extends JFrame {
 		scrollPane.setBackground(Color.decode("#EFD0F5"));
 		table = new JTable();
 		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null }, },
-				new String[] { "Id", "Nombre", "Apellido", "Dni", "Contrase�a" }) {
+				new String[] { "Id", "Nombre", "Apellido", "Dni", "Contrase\u00F1a" }) {
 			Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class };
 
 			public Class getColumnClass(int columnIndex) {
@@ -147,6 +307,62 @@ public class UIUsuarios extends JFrame {
 			}
 		});
 		scrollPane.setViewportView(table);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(88, 40, 611, 188);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		panel.setBackground(Color.decode("#EFD0F5"));
+		JLabel lbl_IDUsuario = new JLabel("ID Usuario");
+		lbl_IDUsuario.setBounds(24, 62, 65, 13);
+		panel.add(lbl_IDUsuario);
+
+		JLabel lblNombre = new JLabel("Nombre");
+		lblNombre.setBounds(24, 85, 54, 13);
+		panel.add(lblNombre);
+
+		JLabel lblApellido = new JLabel("Apellido");
+		lblApellido.setBounds(24, 108, 77, 13);
+		panel.add(lblApellido);
+
+		JLabel lblDni = new JLabel("Dni");
+		lblDni.setBounds(24, 131, 45, 13);
+		panel.add(lblDni);
+
+		JLabel lblContrasena = new JLabel("Contrase\u00F1a");
+		lblContrasena.setBounds(24, 154, 77, 13);
+		panel.add(lblContrasena);
+
+		txt_Id = new JTextField();
+		txt_Id.setEnabled(false);
+		txt_Id.setEditable(false);
+		txt_Id.setBounds(141, 60, 345, 16);
+		panel.add(txt_Id);
+		txt_Id.setColumns(10);
+
+		txt_Nombre = new JTextField();
+		txt_Nombre.setBounds(141, 82, 345, 19);
+		panel.add(txt_Nombre);
+		txt_Nombre.setColumns(10);
+		txt_Nombre.setEditable(false);
+
+		txt_Apellido = new JTextField();
+		txt_Apellido.setBounds(141, 105, 345, 19);
+		panel.add(txt_Apellido);
+		txt_Apellido.setColumns(10);
+		txt_Apellido.setEditable(false);
+
+		txt_Dni = new JTextField();
+		txt_Dni.setBounds(141, 128, 345, 19);
+		panel.add(txt_Dni);
+		txt_Dni.setColumns(10);
+		txt_Dni.setEditable(false);
+
+		txt_Contrasena = new JTextField();
+		txt_Contrasena.setBounds(141, 151, 345, 19);
+		panel.add(txt_Contrasena);
+		txt_Contrasena.setColumns(10);
+		txt_Contrasena.setEditable(false);
 
 		JButton btnRetroceso = new JButton("");
 
@@ -177,12 +393,15 @@ public class UIUsuarios extends JFrame {
 		cargarTabla();
 
 		UiHelper.AplicarMouseListenerButtons(contentPane);
+		UiHelper.AplicarMouseListenerButtons(panel);
 
 		UiHelper.AplicarEstilos(table);
 		btnAnyadir.setBounds(88, 409, 127, 19);
 		contentPane.add(btnAnyadir);
 		btnModificar.setBounds(263, 409, 120, 18);
 		contentPane.add(btnModificar);
+		btnGuardar.setBounds(434, 409, 112, 18);
+		contentPane.add(btnGuardar);
 		btnEliminar.setBounds(596, 409, 103, 18);
 		contentPane.add(btnEliminar);
 
@@ -211,24 +430,27 @@ public class UIUsuarios extends JFrame {
 			}
 		});
 
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				guardarUsuario();
+			}
+		});
 
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (SeleccionarUsuario()) {
-					UsuarioEdicion edit = new UsuarioEdicion();
-					edit.setLocationRelativeTo(null);
-					edit.setVisible(true);
-					dispose();
+				if (!SeleccionarUsuario()) {
+					txt_Contrasena.setEditable(false);
+					cambiarEstado(false);
+				} else {
+					txt_Contrasena.setEditable(true);
+					cambiarEstado(true);
 				}
 			}
 		});
 
 		btnAnyadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UsuarioEdicion add = new UsuarioEdicion();
-				add.setLocationRelativeTo(null);
-				add.setVisible(true);
-				dispose();
+				cambiarEstado(true);
 			}
 		});
 		// Establecemos el nombre del usuario logeado.

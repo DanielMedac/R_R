@@ -11,24 +11,24 @@ public class AdUsuario {
 	private String nombre, apellido, dni, contrasena, direccion;
 	private String tlf;
 
-	public AdUsuario(String nombre, String apellido, String dni, String contrasena, int tlf, String direccion) {
+	public AdUsuario(String nombre, String apellido, String dni, String contrasena/*, int tlf, String direccion*/) {
 		this.id = UUID.randomUUID().toString();
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.contrasena = contrasena;
-		this.tlf = String.valueOf(tlf);
-		this.direccion = direccion;
+		/*this.tlf = String.valueOf(tlf);
+		this.direccion = direccion;*/
 
 	}
 
-	public void Actualizar(String nombre, String apellido, String dni, String contrasena, int tlf, String direccion) {
+	public void Actualizar(String nombre, String apellido, String dni, String contrasena/*, int tlf, String direccion*/) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.contrasena = contrasena;
-		this.tlf = String.valueOf(tlf);
-		this.direccion = direccion;
+		/*this.tlf = String.valueOf(tlf);
+		this.direccion = direccion;*/
 
 	}
 
@@ -41,8 +41,8 @@ public class AdUsuario {
 		this.apellido = token.nextToken();
 		this.dni = token.nextToken();
 		this.contrasena = token.nextToken();
-		this.tlf = token.nextToken();
-		this.direccion = token.nextToken();
+		/*this.tlf = token.nextToken();
+		this.direccion = token.nextToken();*/
 
 	}
 
@@ -79,6 +79,6 @@ public class AdUsuario {
 	@Override
 	public String toString() {
 		return this.id + Helper.tokenColumna + this.nombre + Helper.tokenColumna + this.apellido + Helper.tokenColumna
-				+ this.dni + Helper.tokenColumna + this.contrasena + Helper.tokenColumna + this.tlf + Helper.tokenColumna + this.direccion;
+				+ this.dni + Helper.tokenColumna + this.contrasena /*+ Helper.tokenColumna + this.tlf + Helper.tokenColumna + this.direccion*/;
 	}
 }
