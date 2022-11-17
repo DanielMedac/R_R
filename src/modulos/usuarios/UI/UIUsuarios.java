@@ -41,6 +41,8 @@ public class UIUsuarios extends JFrame {
 	private JTextField txt_Apellido;
 	private JTextField txt_Dni;
 	private JTextField txt_Contrasena;
+	private JTextField txt_Tlf;
+	private JTextField txt_Direccion;
 	private RWUsuario rwUsuario = new RWUsuario();
 
 	private JButton btnModificar = new JButton("Modificar");
@@ -74,6 +76,8 @@ public class UIUsuarios extends JFrame {
 		this.txt_Apellido.setEditable(estado);
 		this.txt_Dni.setEditable(estado);
 		this.txt_Contrasena.setEditable(estado);
+		this.txt_Tlf.setEditable(estado);
+		this.txt_Direccion.setEditable(estado);
 		this.btnModificar.setEnabled(!estado);
 		this.btnEliminar.setEnabled(!estado);
 		this.btnAnyadir.setEnabled(!estado);
@@ -87,6 +91,8 @@ public class UIUsuarios extends JFrame {
 		this.txt_Apellido.setText("");
 		this.txt_Dni.setText("");
 		this.txt_Contrasena.setText("");
+		this.txt_Tlf.setText("");
+		this.txt_Direccion.setText("");
 	}
 
 	public boolean SeleccionarUsuario() {
@@ -106,6 +112,8 @@ public class UIUsuarios extends JFrame {
 		this.txt_Apellido.setText(usuarioSeleccionado.getApellido());
 		this.txt_Dni.setText(usuarioSeleccionado.getDni());
 		this.txt_Contrasena.setText(usuarioSeleccionado.getContrasena());
+		this.txt_Tlf.setText(usuarioSeleccionado.getTlf());
+		this.txt_Direccion.setText(usuarioSeleccionado.getDireccion());
 
 		return true;
 	}
@@ -171,6 +179,34 @@ public class UIUsuarios extends JFrame {
 			txt_Contrasena.requestFocus();
 			return false;
 		}
+		if (txt_Tlf.getText().isEmpty()) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'Telefono' sin rellenar", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Tlf.requestFocus();
+			return false;
+		}
+		if (txt_Tlf.getText().length() > 10) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'Telefono' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Tlf.requestFocus();
+			return false;
+		}
+		if (txt_Direccion.getText().isEmpty()) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'Direccion' sin rellenar", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Direccion.requestFocus();
+			return false;
+		}
+		if (txt_Direccion.getText().length() > 40) {
+			// si deja el campo vacio, salta una ventana de alerta mostrando mensaje
+			JOptionPane.showMessageDialog(rootPane, "Campo 'Direccion' demasiado largo", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			txt_Direccion.requestFocus();
+			return false;
+		}
 		return true;
 	}
 
@@ -186,7 +222,7 @@ public class UIUsuarios extends JFrame {
 
 		try {
 			nuevoUsuario = new AdUsuario(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
-					txt_Contrasena.getText());
+					txt_Contrasena.getText(), txt_Tlf.getText(), txt_Direccion.getText());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -205,7 +241,7 @@ public class UIUsuarios extends JFrame {
 		}
 		try {
 			usuario.Actualizar(txt_Nombre.getText(), txt_Apellido.getText(), txt_Dni.getText(),
-					txt_Contrasena.getText());
+					txt_Contrasena.getText(), txt_Tlf.getText(), txt_Direccion.getText());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -250,7 +286,7 @@ public class UIUsuarios extends JFrame {
 		modelo.setRowCount(0);
 		for (AdUsuario usuario : rwUsuario.getUsuarios()) {
 			modelo.addRow(new Object[] { usuario.getId(), usuario.getNombre(), usuario.getApellido(), usuario.getDni(),
-					usuario.getContrasena(),
+					usuario.getContrasena(), usuario.getTlf(), usuario.getDireccion(),
 
 			});
 		}
@@ -287,20 +323,21 @@ public class UIUsuarios extends JFrame {
 		contentPane.setLayout(null);
 		this.setIconImage(img.getImage());
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(88, 229, 611, 169);
+		scrollPane.setBounds(88, 256, 611, 169);
 		contentPane.add(scrollPane);
 		contentPane.setBackground(Color.decode("#EFD0F5"));
 		scrollPane.setBackground(Color.decode("#EFD0F5"));
 		table = new JTable();
-		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null }, },
-				new String[] { "Id", "Nombre", "Apellido", "Dni", "Contrase\u00F1a" }) {
-			Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class };
+		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null, null, null }, },
+				new String[] { "Id", "Nombre", "Apellido", "Dni", "Contrase\u00F1a", "Teléfono", "Dirección" }) {
+			Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class,
+					String.class, String.class };
 
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 
-			boolean[] columnEditables = new boolean[] { false, false, false, false, false };
+			boolean[] columnEditables = new boolean[] { false, false, false, false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -309,60 +346,66 @@ public class UIUsuarios extends JFrame {
 		scrollPane.setViewportView(table);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(88, 40, 611, 188);
+		panel.setBounds(88, 40, 611, 205);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		panel.setBackground(Color.decode("#EFD0F5"));
 		JLabel lbl_IDUsuario = new JLabel("ID Usuario");
-		lbl_IDUsuario.setBounds(24, 62, 65, 13);
+		lbl_IDUsuario.setBounds(24, 31, 65, 13);
 		panel.add(lbl_IDUsuario);
 
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(24, 85, 54, 13);
+		lblNombre.setBounds(24, 55, 54, 13);
 		panel.add(lblNombre);
 
 		JLabel lblApellido = new JLabel("Apellido");
-		lblApellido.setBounds(24, 108, 77, 13);
+		lblApellido.setBounds(24, 79, 77, 13);
 		panel.add(lblApellido);
 
 		JLabel lblDni = new JLabel("Dni");
-		lblDni.setBounds(24, 131, 45, 13);
+		lblDni.setBounds(24, 103, 45, 13);
 		panel.add(lblDni);
 
-		JLabel lblContrasena = new JLabel("Contrase\u00F1a");
-		lblContrasena.setBounds(24, 154, 77, 13);
-		panel.add(lblContrasena);
+		JLabel lblDireccion = new JLabel("Dirección");
+		lblDireccion.setBounds(24, 155, 77, 13);
+		panel.add(lblDireccion);
 
 		txt_Id = new JTextField();
 		txt_Id.setEnabled(false);
 		txt_Id.setEditable(false);
-		txt_Id.setBounds(141, 60, 345, 16);
+		txt_Id.setBounds(141, 29, 345, 16);
 		panel.add(txt_Id);
 		txt_Id.setColumns(10);
 
 		txt_Nombre = new JTextField();
-		txt_Nombre.setBounds(141, 82, 345, 19);
+		txt_Nombre.setBounds(141, 51, 345, 19);
 		panel.add(txt_Nombre);
 		txt_Nombre.setColumns(10);
 		txt_Nombre.setEditable(false);
 
 		txt_Apellido = new JTextField();
-		txt_Apellido.setBounds(141, 105, 345, 19);
+		txt_Apellido.setBounds(141, 75, 345, 19);
 		panel.add(txt_Apellido);
 		txt_Apellido.setColumns(10);
 		txt_Apellido.setEditable(false);
 
 		txt_Dni = new JTextField();
-		txt_Dni.setBounds(141, 128, 345, 19);
+		txt_Dni.setBounds(141, 103, 345, 13);
 		panel.add(txt_Dni);
 		txt_Dni.setColumns(10);
 		txt_Dni.setEditable(false);
 
-		txt_Contrasena = new JTextField();
-		txt_Contrasena.setBounds(141, 151, 345, 19);
-		panel.add(txt_Contrasena);
-		txt_Contrasena.setColumns(10);
-		txt_Contrasena.setEditable(false);
+		txt_Tlf = new JTextField();
+		txt_Tlf.setBounds(141, 175, 345, 19);
+		panel.add(txt_Tlf);
+		txt_Tlf.setColumns(10);
+		txt_Tlf.setEditable(false);
+
+		txt_Direccion = new JTextField();
+		txt_Direccion.setBounds(141, 154, 345, 13);
+		panel.add(txt_Direccion);
+		txt_Direccion.setColumns(10);
+		txt_Direccion.setEditable(false);
 
 		JButton btnRetroceso = new JButton("");
 
@@ -395,18 +438,32 @@ public class UIUsuarios extends JFrame {
 		UiHelper.AplicarMouseListenerButtons(contentPane);
 		UiHelper.AplicarMouseListenerButtons(panel);
 
+		JLabel lblContrasena = new JLabel("Contrase\u00F1a");
+		lblContrasena.setBounds(24, 127, 77, 13);
+		panel.add(lblContrasena);
+
+		JLabel lblTelefono = new JLabel("Teléfono");
+		lblTelefono.setBounds(24, 179, 77, 13);
+		panel.add(lblTelefono);
+
+		txt_Contrasena = new JTextField();
+		txt_Contrasena.setBounds(141, 121, 345, 19);
+		panel.add(txt_Contrasena);
+		txt_Contrasena.setColumns(10);
+		txt_Contrasena.setEditable(false);
+
 		UiHelper.AplicarEstilos(table);
-		btnAnyadir.setBounds(88, 409, 127, 19);
+		btnAnyadir.setBounds(88, 436, 127, 19);
 		contentPane.add(btnAnyadir);
-		btnModificar.setBounds(263, 409, 120, 18);
+		btnModificar.setBounds(261, 436, 120, 18);
 		contentPane.add(btnModificar);
-		btnGuardar.setBounds(434, 409, 112, 18);
+		btnGuardar.setBounds(434, 436, 112, 18);
 		contentPane.add(btnGuardar);
-		btnEliminar.setBounds(596, 409, 103, 18);
+		btnEliminar.setBounds(596, 436, 103, 18);
 		contentPane.add(btnEliminar);
 
 		JButton btnInformes = new JButton("Informes");
-		btnInformes.setBounds(273, 448, 273, 21);
+		btnInformes.setBounds(273, 469, 273, 21);
 		contentPane.add(btnInformes);
 		btnInformes.addMouseListener(new MouseAdapter() {
 			@Override
